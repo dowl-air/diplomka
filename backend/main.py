@@ -1,8 +1,9 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, Response, current_app
 import requests
 import chromedriver_autoinstaller
 import json
 from time import sleep
+from flask_cors import CORS
 
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
@@ -20,6 +21,13 @@ options.binary_location = "~/snap/bin/brave"
 # chromedriver_autoinstaller.install()
 
 app = Flask(__name__)
+
+cors = CORS(app, origins=["http://localhost:3000"])
+
+
+# event for SSE
+def event(data):
+    return f"data: {json.dumps(data, ensure_ascii=False)}\n\n"
 
 
 def get_url_content(url):
@@ -129,6 +137,7 @@ def get_structured_data(html_content):
 
 
 def build_dbpedia_query_url(search_term):
+    # todo surface form search (RDFC label) - regex
     query = (
         f"SELECT DISTINCT ?s WHERE {{ "
         f"?s ?p ?o . "
@@ -142,10 +151,8 @@ def build_dbpedia_query_url(search_term):
 
 # Function to search on DBPedia
 def search_dbpedia(search_term):
-    url = build_dbpedia_query_url(search_term)
-    return print(url)
-
-    response = requests.get(url)
+    url = f"https://lookup.dbpedia.org/api/search?query={search_term}&maxResults=2&format=JSON"
+    response = requests.get(url, headers={"Accept": "application/json"})
     if response.status_code == 200:
         return response.json()
     else:
@@ -165,13 +172,31 @@ def search_wikidata(search_term):
 # API endpoint for search
 @app.route("/search")
 def search():
-    search_term = request.args.get("q")
-    if search_term:
-        dbpedia_results = search_dbpedia(search_term)
-        wikidata_results = search_wikidata(search_term)
-        return jsonify({"DBPedia": dbpedia_results, "WikiData": wikidata_results})
-    else:
+    q = request.args.get("q")
+
+    if not q:
         return jsonify({"error": "No search term provided"})
+
+    search_terms = json.loads(q)
+
+    if not search_terms:
+        return jsonify({"error": "No search term provided"})
+
+    result = []
+
+    for index, term in enumerate(search_terms):
+        wikidata_results = search_wikidata(term)
+        dbpedia_results = search_dbpedia(term)
+        result.append(
+            {
+                "searchTerm": term,
+                "index": index,
+                "DBPedia": dbpedia_results,
+                "WikiData": wikidata_results,
+            }
+        )
+
+    return jsonify(result)
 
 
 @app.route("/scan")
@@ -185,6 +210,38 @@ def scan():
         return data or schema or jsonify({"error": "No structured data found"})
     else:
         return jsonify({"error": "No URL provided"})
+
+
+@app.route("/scan-sse")
+def scan_sse():
+    url_address = request.args.get("url")
+
+    def generate():
+        if not url_address:
+            yield event({"error": "No URL provided"})
+            return
+
+        yield event({"message": "Fetching URL content..."})
+        html_content = get_url_content(url_address)
+
+        yield event({"message": "Extracting structured data..."})
+        data = get_structured_data(html_content=html_content)
+
+        yield event({"message": "Extracting schematic data..."})
+        schema = extract_schema_data(html_content=html_content)
+
+        # Send final data
+        if data:
+            yield event({"result": data})
+        elif schema:
+            yield event({"result": schema})
+        else:
+            yield event({"error": "No structured data found"})
+            return
+
+        yield event({"complete": True})
+
+    return Response(generate(), mimetype="text/event-stream")
 
 
 if __name__ == "__main__":
