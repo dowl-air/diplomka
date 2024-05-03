@@ -31,3 +31,9 @@ body {
     text-wrap: balance;
   }
 }
+
+.react-sigma-controls > .react-sigma-control > button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
