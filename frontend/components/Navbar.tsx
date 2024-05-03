@@ -28,23 +28,6 @@ const Navbar = () => {
                             </div>
                         </div>
                     </div>
-
-                    <button
-                        type="button"
-                        className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
-                        id="user-menu"
-                        aria-expanded="false"
-                        aria-haspopup="true"
-                    >
-                        <span className="sr-only">Open user menu</span>
-                        <Image
-                            src="https://avatars.githubusercontent.com/u/170283?v=4"
-                            alt=""
-                            width={40}
-                            height={40}
-                            className="h-8 w-8 rounded-full"
-                        />
-                    </button>
                 </div>
             </div>
         </nav>
