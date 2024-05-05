@@ -2,6 +2,7 @@ import { DBPediaResponse, LinkedDataSearchResponse, WikiDataResponse } from "@/t
 import { MultiDirectedGraph } from "graphology";
 import { isEmptyObject } from "./object";
 import { generateRandomColors } from "./color";
+import { removeTags } from "./removeTags";
 
 const createDBPediaNodes = (linkedData: DBPediaResponse, searchTerm: string) => {
     const nodes = linkedData.docs.map((doc) => {
@@ -9,7 +10,7 @@ const createDBPediaNodes = (linkedData: DBPediaResponse, searchTerm: string) => 
             "@id": doc.resource[0],
             "@type": "dbpedia",
             "@parent": searchTerm,
-            label: doc.label[0],
+            label: removeTags(doc.label[0]),
             description: doc.comment[0],
             url: doc.resource[0],
             obj: doc,
@@ -49,8 +50,6 @@ const createBaseNodes = (colors: string[], linkedData: LinkedDataSearchResponse)
 
 export const createGraphFromLinkedData = (linkedData: LinkedDataSearchResponse) => {
     const graph = new MultiDirectedGraph();
-
-    console.log(linkedData);
 
     if (!linkedData || linkedData.length === 0) return graph;
 

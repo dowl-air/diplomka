@@ -1,4 +1,20 @@
-import { allExpanded, darkStyles, JsonView } from "react-json-view-lite";
+import { collapseAllNested, darkStyles, JsonView } from "react-json-view-lite";
+
+const ExternalButton = ({ node }: { node: any }) => {
+    if (node.resource) {
+        return (
+            <a target="_blank" href={node.resource}>
+                <button className="btn btn-sm btn-primary my-2">Visit DBPedia</button>
+            </a>
+        );
+    } else if (node.concepturi) {
+        return (
+            <a target="_blank" href={node.concepturi}>
+                <button className="btn btn-sm btn-primary my-2">Visit Wikidata</button>
+            </a>
+        );
+    }
+};
 
 const DialogLabel = ({ node }: { node: any }) => {
     if (!node) return null;
@@ -10,6 +26,7 @@ const DialogLabel = ({ node }: { node: any }) => {
 };
 
 const NodeDialog = ({ node }: { node: any }) => {
+    console.log(node);
     return (
         <>
             <dialog id="node-modal" className="modal">
@@ -20,7 +37,8 @@ const NodeDialog = ({ node }: { node: any }) => {
                     <h3 className="font-bold text-lg mb-6">
                         {node && node.label} <DialogLabel node={node} />
                     </h3>
-                    <JsonView data={node} shouldExpandNode={allExpanded} style={darkStyles} />
+                    {node && <ExternalButton node={node} />}
+                    <JsonView data={node} shouldExpandNode={collapseAllNested} style={darkStyles} />
                 </div>
             </dialog>
         </>

@@ -35,9 +35,6 @@ const AnalyzeForm = () => {
                     Analyze Now!
                 </button>
             </div>
-            <button onClick={handleFormTypeChange} className="hover:underline mt-3 text-sm">
-                Want to insert HTML code directly?
-            </button>
         </form>
     );
 };

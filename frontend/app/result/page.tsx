@@ -123,7 +123,7 @@ const ResultPage = () => {
                 {extractedDataState === DataState.COMPLETE && (
                     <>
                         {extractedData && (
-                            <div className="w-full mt-4 rounded-md overflow-hidden">
+                            <div className="w-full mt-4 rounded-md overflow-y-auto max-h-[720px]">
                                 <JsonView data={extractedData} shouldExpandNode={allExpanded} style={darkStyles} />
                             </div>
                         )}
@@ -146,11 +146,8 @@ const ResultPage = () => {
                 {linkedDataState === DataState.COMPLETE && (
                     <>
                         {linkedDataGraph && (
-                            /*  <div className="w-full mt-4 rounded-md overflow-hidden">
-                                <JsonView data={linkedData} shouldExpandNode={allExpanded} style={darkStyles} />
-                            </div> */
                             <div className="w-full mt-4 rounded-md overflow-hidden">
-                                <LoadGraphWithProp graph={linkedDataGraph} style={{ width: "600px", height: "700px" }} setModalId={setModalId} />
+                                <LoadGraphWithProp graph={linkedDataGraph} style={{ width: "600px", height: "720px" }} setModalId={setModalId} />
                                 <NodeDialog node={modalValue} />
                             </div>
                         )}
