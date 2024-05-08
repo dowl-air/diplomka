@@ -73,7 +73,11 @@ export const createGraphFromLinkedData = (linkedData: LinkedDataSearchResponse) 
     linkedDataWithoutRoot.shift();
 
     const baseNodes = createBaseNodes(baseColors, linkedDataWithoutRoot);
-    for (const node of baseNodes) {
+    //remove duplicates (same id)
+    const uniqueBaseNodes = baseNodes.filter(
+        (node, index, self) => index === self.findIndex((t) => t["@id"] === node["@id"]) && node["@id"] !== rootSearchTerm
+    );
+    for (const node of uniqueBaseNodes) {
         graph.addNode(node["@id"], { ...node, x: Math.random(), y: Math.random(), size: 10 });
         graph.addEdgeWithKey(`${node["@id"]}-root`, node["@id"], rootSearchTerm, { label: "root" });
     }
