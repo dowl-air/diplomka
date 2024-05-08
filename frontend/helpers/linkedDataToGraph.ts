@@ -5,6 +5,7 @@ import { generateRandomColors } from "./color";
 import { removeTags } from "./removeTags";
 
 const createDBPediaNodes = (linkedData: DBPediaResponse, searchTerm: string) => {
+    if (!linkedData.docs) return [];
     const nodes = linkedData.docs.map((doc) => {
         return {
             "@id": doc.resource[0],
@@ -20,6 +21,7 @@ const createDBPediaNodes = (linkedData: DBPediaResponse, searchTerm: string) => 
 };
 
 const createWikiNodes = (linkedData: WikiDataResponse, searchTerm: string) => {
+    if (!linkedData.search) return [];
     const nodes = linkedData.search.map((search) => {
         return {
             "@id": search.id,
