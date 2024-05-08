@@ -24,7 +24,6 @@ export const getDataToSearch = (data: any): String[] => {
 
     if (typeof data === "object") {
         const results = searchObject(data);
-        console.log(results);
         return results;
     }
 

@@ -14,7 +14,6 @@ const GraphEvents = ({ setModalId }: { setModalId: (node: string) => void }) => 
         registerEvents({
             clickNode: (event) => {
                 if (!document) return;
-                console.log(event.node);
                 setModalId(event.node);
                 (document.getElementById("node-modal") as HTMLDialogElement).showModal();
             },

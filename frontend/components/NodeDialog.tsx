@@ -26,7 +26,6 @@ const DialogLabel = ({ node }: { node: any }) => {
 };
 
 const NodeDialog = ({ node }: { node: any }) => {
-    console.log(node);
     return (
         <>
             <dialog id="node-modal" className="modal">
