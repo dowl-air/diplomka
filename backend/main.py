@@ -114,26 +114,29 @@ def get_structured_data(html_content):
         return None
 
     # Find JSON-LD or RDFa scripts
-    script_data = None
+    script_data = []
 
     for script in html_content.find_all("script"):
         if script.get("type") == "application/ld+json":
-            script_data = script.text.strip()
-            break
+            script_content = script.string.strip()
+            try:
+                parsed_data = json.loads(script_content)
+                script_data.append(parsed_data)
+            except Exception as e:
+                print(f"Error parsing JSON-LD: {e}")
         elif "rdf" in script.get("type", ""):  # Check for RDFa (less common)
-            script_data = script.text.strip()
-            break
+            script_content = script.string.strip()
+            try:
+                parsed_data = script_content
+                script_data.append(parsed_data)
+            except Exception as e:
+                print(f"Error parsing RDFa: {e}")
 
     # Try parsing JSON-LD if found
-    if script_data:
-        try:
-            return json.loads(script_data)
-        except Exception as e:
-            print(f"Error parsing JSON-LD: {e}")
-            pass
-
-    # No structured data found
-    return None
+    if len(script_data):
+        return script_data
+    else:
+        return None
 
 
 def build_dbpedia_query_url(search_term):
