@@ -11,7 +11,7 @@ export const getDataToSearch = (data: any): String[] => {
             if (typeof currentObject === "object" && currentObject !== null) {
                 for (const key in currentObject) {
                     if (key === "name") {
-                        results.push(currentObject[key]); // Add "name" value to results
+                        if (typeof currentObject[key] === "string" && currentObject[key].length > 0) results.push(currentObject[key]);
                     } else {
                         queue.push(currentObject[key]); // Enqueue child objects for later search
                     }
