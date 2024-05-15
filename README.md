@@ -53,7 +53,7 @@ Spuštění aplikace bylo testováno na následující konfiguraci:
 
 ## Vývoj
 
-## Frontend
+### Frontend
 
 Je zapotřebí mít nainstalovaný `Node.js` ve verzi 20 a `npm` ve verzi 10.
 
@@ -63,7 +63,7 @@ Pro spuštění vývojového serveru pro frontend přejděte do složky frontend
 npm run dev
 ```
 
-## Backend
+### Backend
 
 Je zapotřebí mít nainstalovaný `python3` ve verzi 3.10.
 
