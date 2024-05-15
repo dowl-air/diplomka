@@ -41,6 +41,16 @@ export default function Home() {
                 </div>
             </div>
 
+            <div id="about" className="flex flex-col justify-center items-center py-16 sm:py-32 bg-gradient-to-r from-blue-500 to-indigo-500">
+                <h2 className="text-3xl md:text-5xl font-bold text-white mt-3 text-center">About</h2>
+                <p className="text-xl sm:text-2xl text-gray-100 text-center mt-8 sm:mt-16 max-w-7xl px-2">
+                    Aetheria is a powerful tool that allows you to analyze structured data from websites. By simply entering a URL, our tool fetches
+                    the structured data and displays it in an easy-to-understand format. With the help of Linked data from DBPedia and WikiData, you
+                    can gain valuable insights and make informed decisions based on the analyzed website information. Try it out now and supercharge
+                    your insights!
+                </p>
+            </div>
+
             <h2 className="text-3xl font-bold text-gray-800 text-center mt-16" id="faq">
                 Frequently Asked Questions
             </h2>
