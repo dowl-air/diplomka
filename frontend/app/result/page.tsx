@@ -1,16 +1,17 @@
 "use client";
 
-import { LoadGraphWithProp } from "@/components/Graph";
 import NodeDialog from "@/components/NodeDialog";
 import { useToAnalyze } from "@/context/ToAnalyze";
 import { getDataToSearch } from "@/helpers/getDataToSearch";
 import { getModalObj } from "@/helpers/getModalObj";
 import { createGraphFromLinkedData } from "@/helpers/linkedDataToGraph";
-import { MultiDirectedGraph } from "graphology";
-import { get } from "http";
 import { useEffect, useState } from "react";
 import { JsonView, allExpanded, darkStyles } from "react-json-view-lite";
 import "react-json-view-lite/dist/index.css";
+
+import dynamic from "next/dynamic";
+
+const LoadGraphWithProp = dynamic(() => import("@/components/Graph"), { ssr: false });
 
 enum DataState {
     INIT = "init",
@@ -21,7 +22,6 @@ enum DataState {
 
 const ResultPage = () => {
     const { value: analyzeValue } = useToAnalyze();
-    const { setValue } = useToAnalyze();
 
     const [extractedDataState, setExtractedDataState] = useState<DataState>(DataState.INIT);
     const [extractedData, setExtractedData] = useState<any>(null);

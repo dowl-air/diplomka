@@ -1,6 +1,5 @@
 from flask import Flask, request, jsonify, Response, current_app
 import requests
-import chromedriver_autoinstaller
 import json
 from time import sleep
 from flask_cors import CORS
@@ -12,13 +11,11 @@ from selenium.webdriver.support import expected_conditions as EC
 from bs4 import BeautifulSoup
 
 options = webdriver.ChromeOptions()
-options.binary_location = "~/snap/bin/brave"
-
-
-# Check if the current version of chromedriver exists
-# and if it doesn't exist, download it automatically,
-# then add chromedriver to path
-# chromedriver_autoinstaller.install()
+options.add_experimental_option("detach", True)
+options.add_argument("--headless")
+options.add_argument("--no-sandbox")
+options.add_argument("--disable-gpu")
+options.add_argument("--disable-dev-shm-usage")
 
 app = Flask(__name__)
 
@@ -248,4 +245,4 @@ def scan_sse():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)

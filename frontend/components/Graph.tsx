@@ -42,7 +42,7 @@ const Fa2: FC = () => {
     return null;
 };
 
-export const LoadGraphWithProp: FC<{ style: CSSProperties; graph: MultiDirectedGraph; setModalId: (node: string) => void }> = ({
+const LoadGraphWithProp: FC<{ style: CSSProperties; graph: MultiDirectedGraph; setModalId: (node: string) => void }> = ({
     style,
     graph,
     setModalId,
@@ -63,3 +63,5 @@ export const LoadGraphWithProp: FC<{ style: CSSProperties; graph: MultiDirectedG
         </>
     );
 };
+
+export default LoadGraphWithProp;
